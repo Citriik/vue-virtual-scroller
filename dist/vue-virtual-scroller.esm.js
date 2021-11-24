@@ -182,7 +182,7 @@ if (typeof window !== 'undefined') {
 
 var uid = 0;
 var script = {
-  name: 'RecycleScroller',
+  name: "RecycleScroller",
   components: {
     ResizeObserver: ResizeObserver$1
   },
@@ -200,11 +200,11 @@ var script = {
     },
     sizeField: {
       type: String,
-      default: 'size'
+      default: "size"
     },
     typeField: {
       type: String,
-      default: 'type'
+      default: "type"
     },
     buffer: {
       type: Number,
@@ -235,7 +235,7 @@ var script = {
     sizes: function sizes() {
       if (this.itemSize === null) {
         var sizes = {
-          '-1': {
+          "-1": {
             accumulator: 0
           }
         };
@@ -327,7 +327,7 @@ var script = {
         key: key,
         type: type
       };
-      Object.defineProperty(view, 'nr', {
+      Object.defineProperty(view, "nr", {
         configurable: false,
         value: nonReactive
       });
@@ -354,7 +354,7 @@ var script = {
       }
     },
     handleResize: function handleResize() {
-      this.$emit('resize');
+      this.$emit("resize");
       if (this.ready) this.updateVisibleItems(false);
     },
     handleScroll: function handleScroll(event) {
@@ -382,12 +382,12 @@ var script = {
 
       if (this.ready) {
         if (isVisible || entry.boundingClientRect.width !== 0 || entry.boundingClientRect.height !== 0) {
-          this.$emit('visible');
+          this.$emit("visible");
           requestAnimationFrame(function () {
             _this3.updateVisibleItems(false);
           });
         } else {
-          this.$emit('hidden');
+          this.$emit("hidden");
         }
       }
     },
@@ -591,7 +591,7 @@ var script = {
 
       this.$_startIndex = startIndex;
       this.$_endIndex = endIndex;
-      if (this.emitUpdate) this.$emit('update', startIndex, endIndex); // After the user has finished scrolling
+      if (this.emitUpdate) this.$emit("update", startIndex, endIndex); // After the user has finished scrolling
       // Sort views so text selection is correct
 
       clearTimeout(this.$_sortTimer);
@@ -612,7 +612,7 @@ var script = {
     getScroll: function getScroll() {
       var el = this.$el,
           direction = this.direction;
-      var isVertical = direction === 'vertical';
+      var isVertical = direction === "vertical";
       var scrollState;
 
       if (this.pageMode) {
@@ -657,18 +657,18 @@ var script = {
     },
     addListeners: function addListeners() {
       this.listenerTarget = this.getListenerTarget();
-      this.listenerTarget.addEventListener('scroll', this.handleScroll, supportsPassive ? {
+      this.listenerTarget.addEventListener("scroll", this.handleScroll, supportsPassive ? {
         passive: true
       } : false);
-      this.listenerTarget.addEventListener('resize', this.handleResize);
+      this.listenerTarget.addEventListener("resize", this.handleResize);
     },
     removeListeners: function removeListeners() {
       if (!this.listenerTarget) {
         return;
       }
 
-      this.listenerTarget.removeEventListener('scroll', this.handleScroll);
-      this.listenerTarget.removeEventListener('resize', this.handleResize);
+      this.listenerTarget.removeEventListener("scroll", this.handleScroll);
+      this.listenerTarget.removeEventListener("resize", this.handleResize);
       this.listenerTarget = null;
     },
     scrollToItem: function scrollToItem(index) {
@@ -683,7 +683,7 @@ var script = {
       this.scrollToPosition(scroll);
     },
     scrollToPosition: function scrollToPosition(position) {
-      if (this.direction === 'vertical') {
+      if (this.direction === "vertical") {
         this.$el.scrollTop = position;
       } else {
         this.$el.scrollLeft = position;
@@ -693,10 +693,10 @@ var script = {
       var _this4 = this;
 
       setTimeout(function () {
-        console.log('It seems the scroller element isn\'t scrolling, so it tries to render all the items at once.', 'Scroller:', _this4.$el);
-        console.log('Make sure the scroller has a fixed height (or width) and \'overflow-y\' (or \'overflow-x\') set to \'auto\' so it can scroll correctly and only render the items visible in the scroll viewport.');
+        console.log("It seems the scroller element isn't scrolling, so it tries to render all the items at once.", "Scroller:", _this4.$el);
+        console.log("Make sure the scroller has a fixed height (or width) and 'overflow-y' (or 'overflow-x') set to 'auto' so it can scroll correctly and only render the items visible in the scroll viewport.");
       });
-      throw new Error('Rendered items limit reached');
+      throw new Error("Rendered items limit reached");
     },
     sortViews: function sortViews() {
       this.pool.sort(function (viewA, viewB) {
@@ -836,6 +836,7 @@ var __vue_render__ = function() {
             _obj$1)
         },
         _vm._l(_vm.pool, function(view) {
+          var _obj;
           return _c(
             "div",
             {
@@ -843,14 +844,20 @@ var __vue_render__ = function() {
               staticClass: "vue-recycle-scroller__item-view",
               class: { hover: _vm.hoverKey === view.nr.key },
               style: _vm.ready
-                ? {
-                    transform:
-                      "translate" +
-                      (_vm.direction === "vertical" ? "Y" : "X") +
-                      "(" +
-                      view.position +
-                      "px)"
-                  }
+                ? view.item.modal
+                  ? ((_obj = {}),
+                    (_obj[_vm.direction === "vertical" ? "top" : "left"] =
+                      view.position + "px"),
+                    (_obj.willChange = "unset"),
+                    _obj)
+                  : {
+                      transform:
+                        "translate" +
+                        (_vm.direction === "vertical" ? "Y" : "X") +
+                        "(" +
+                        view.position +
+                        "px)"
+                    }
                 : null,
               on: {
                 mouseenter: function($event) {
